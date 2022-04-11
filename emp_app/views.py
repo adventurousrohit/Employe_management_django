@@ -38,13 +38,21 @@ def add_emp(request):
     else:
         return http.HttpResponse('An Excepction occured:Employee')
 
-def remove_emp(request):
-    emps= Employee.objects.all()
+def remove_emp(request, emp_id=0):
+    if emp_id:
+        try:
+            print(emp_id)
+            emp_to_be_removed=Employee.objects.get(id=emp_id)
+            emp_to_be_removed.delete()
+            return http.HttpResponse('Employee remove succesfully')
+        except:
+            return http.HttpResponse('please enter a valid EMP id')
+    emps=Employee.objects.all()
     context={
-        emps:emps
+        'emps':emps
     }
     print(context)
-    return render(request,'remove_emp.html', context)
+    return render(request,'remove_emp.html',context)
 
 def filter_emp(request):
     return render(request,'filter_emp.html')
